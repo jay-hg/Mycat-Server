@@ -1,8 +1,8 @@
 package io.mycat.config.model;
 
 public class SystemConfig2 {
-    private String bindIp = "0.0.0.0";
-    private int serverPort;
+    private String bindIp = "127.0.0.1";
+    private int serverPort = 8066;
 
     public String getBindIp() {
         return bindIp;
