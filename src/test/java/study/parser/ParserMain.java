@@ -7,7 +7,7 @@ import com.alibaba.druid.sql.parser.SQLStatementParser;
 
 public class ParserMain {
     public static void main(String[] args) {
-        String sql = "select id,name from user where createTime >= '2020-07-15 12:00:00'";
+        String sql = "select id,name from user where createTime >= '2019-07-15 12:00:00' and createTime <= '2020-07-15 12:00:00'";
 
         SQLStatementParser sqlStatementParser = new MySqlStatementParser(sql);
 
