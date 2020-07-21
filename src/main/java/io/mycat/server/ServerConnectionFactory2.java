@@ -2,7 +2,9 @@ package io.mycat.server;
 
 import io.mycat.MycatServer;
 import io.mycat.net.FrontendConnection;
+import io.mycat.net.NIOHandler;
 import io.mycat.net.factory.FrontendConnectionFactory;
+import io.mycat.net.handler.FrontendAuthenticator2;
 
 import java.io.IOException;
 import java.net.StandardSocketOptions;
@@ -22,6 +24,8 @@ public class ServerConnectionFactory2 extends FrontendConnectionFactory {
 
         FrontendConnection c = getConnection(channel);
 //        MycatServer.getInstance().getConfig().setSocketParams(c, true);
+        NIOHandler handler = new FrontendAuthenticator2(c);
+        c.setHandler(handler);
         return c;
     }
 }

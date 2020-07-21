@@ -1,5 +1,6 @@
 package io.mycat.net;
 
+import io.mycat.MycatServer2;
 import io.mycat.server.ServerConnectionFactory;
 import io.mycat.server.ServerConnectionFactory2;
 import io.mycat.util.SelectorUtil;
@@ -58,8 +59,8 @@ public class NIOAcceptor2 extends Thread implements SocketAcceptor {
             try {
                 final Selector tSelector = this.selector;
                 long start = System.nanoTime();
-                long end = System.nanoTime();
                 tSelector.select(1000L);
+                long end = System.nanoTime();
                 Set<SelectionKey> keys = tSelector.selectedKeys();
 
                 if (keys.size() == 0 && (end - start) < SelectorUtil.MIN_SELECT_TIME_IN_NANO_SECONDS) {
@@ -67,7 +68,7 @@ public class NIOAcceptor2 extends Thread implements SocketAcceptor {
                 } else {
                     try {
                         for (SelectionKey key : keys) {
-                            if (key.isValid() && key.isReadable()) {
+                            if (key.isValid() && key.isAcceptable()) {
                                 accept();
                             } else {
                                 key.cancel();
@@ -103,6 +104,9 @@ public class NIOAcceptor2 extends Thread implements SocketAcceptor {
         FrontendConnection connection = sf.make(socketChannel);
         connection.setAccepted(true);
         connection.setId(1L);
+
+        NIOProcessor processor = MycatServer2.getInstance().nextProcessor();
+        connection.setProcessor(processor);
 
         NIOReactor reactor = nioReactorPool.getNextReactor();
         reactor.postRegister(connection);
